@@ -1,7 +1,5 @@
 require 'oystercard'
 describe Oystercard do
-  it "Creates Oystercard class" do
-  end
   it 'has a balance of zero' do
     expect(subject.balance).to eq(0)
   end
