@@ -18,5 +18,25 @@ describe Oystercard do
     subject.top_up(20)
     expect{ subject.deduct 5 }.to change { subject.balance }.by (-5)
   end
+
+  describe "#touch_in" do 
+    it "raise error if balance below 1" do
+      expect{ subject.touch_in }.to raise_error "Balance needs to be 1 or more"
+    end
+    it "Change in_journey from false to true" do
+      subject.top_up(20)
+      subject.touch_in
+      expect(subject.in_journey?).to eq(true)
+    end
+  end
+  
+  describe "#touch_out" do
+    it "Change in journey from true to false" do
+      subject.top_up(20)
+      subject.touch_in
+      expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
+      expect(subject.in_journey?).to eq(false)
+    end
+  end
 end
 
