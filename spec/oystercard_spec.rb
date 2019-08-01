@@ -19,6 +19,10 @@ describe Oystercard do
     expect{ subject.deduct 5 }.to change { subject.balance }.by (-5)
   end
 
+  it 'checks the card for empty list of journeys by default' do
+    expect(subject.journey).to eq({})
+  end
+
   describe "#touch_in" do 
     let(:station){ double :station }
 
@@ -45,6 +49,17 @@ describe Oystercard do
       subject.touch_in(station)
       expect{ subject.touch_out(station) }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
     end
+
+    it "check journey history" do
+      subject.top_up(20)
+      sta_1 = Station.new("Aldgate East")
+      sta_2 = Station.new("Hammersmith")
+      subject.touch_in(sta_1)
+      subject.touch_out(sta_2)
+      expect(subject.journey).to eq({ enter: sta_1, exit: sta_2})
+    end
   end
+
+
 end
 
